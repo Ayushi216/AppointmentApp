@@ -59,9 +59,9 @@
                 }
 
                 const parentNode = document.getElementById('listOfUsers');
-                const childHTML = `<li id=${user.email}> ${user.name} - ${user.email}
-                                        <button onclick=deleteUser('${user.email}')> Delete User </button>
-                                        <button onclick=editUserDetails('${user.email}','${user.name}','${user.phonenumber}')>Edit User </button>
+                const childHTML = `<li id=${user._id}> ${user.name} - ${user.email}
+                                        <button onclick=deleteUser('${user._id}')> Delete User </button>
+                                        <button onclick=editUserDetails('${user._id}','${user.name}','${user.phonenumber}')>Edit User </button>
                                      </li>`
 
                 parentNode.innerHTML = parentNode.innerHTML + childHTML;
@@ -78,18 +78,21 @@
                 deleteUser(emailId)
              }
 
-            // deleteUser('abc@gmail.com')
 
-            function deleteUser(emailId){
-                console.log(emailId)
-                localStorage.removeItem(emailId);
-                removeUserFromScreen(emailId);
+            function deleteUser(userId){
+                axios.delete(`https://crudcrud.com/api/d5cd0aae5df04d288fe608b00ad12074/appointmentData/${userId}`)
+                    .then((response) => {
+                        removeUserFromScreen(userId)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
 
             }
 
-            function removeUserFromScreen(emailId){
+            function removeUserFromScreen(userId){
                 const parentNode = document.getElementById('listOfUsers');
-                const childNodeToBeDeleted = document.getElementById(emailId);
+                const childNodeToBeDeleted = document.getElementById(userId);
                 if(childNodeToBeDeleted) {
                     parentNode.removeChild(childNodeToBeDeleted)
                 }
